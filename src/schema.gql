@@ -2,10 +2,35 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type HelloResponse {
-  message: String!
+type AuthOutput {
+  id: String!
+  email: String!
+}
+
+type AuthTokenOutput {
+  accessToken: String!
 }
 
 type Query {
-  sayHello: HelloResponse!
+  hello: String!
+}
+
+type Mutation {
+  userRegister(input: RegisterInput!): AuthOutput!
+  userLogin(input: LoginInput!): AuthTokenOutput!
+  userLoginWithGoogle(input: GoogleLoginInput!): AuthTokenOutput!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input GoogleLoginInput {
+  idToken: String!
 }
