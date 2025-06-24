@@ -25,13 +25,16 @@ export class LoginWithGoogleUseCase {
     }
 
     const email = payload.email;
+    const name = payload.name || 'Usuário Google';
+    const phone = '';
+
     if (!email) {
       throw new Error('Email não encontrado no Google');
     }
 
     let user = await this.authRepository.findByEmail(email);
     if (!user) {
-      const newUser = new User('', email, '');
+      const newUser = new User('', name, email, phone, '');
       user = await this.authRepository.create(newUser);
     }
 

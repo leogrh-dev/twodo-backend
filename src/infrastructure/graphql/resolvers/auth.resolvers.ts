@@ -4,6 +4,7 @@ import { AuthOutput, AuthTokenOutput } from '../dto/auth.output';
 import { RegisterUserUseCase } from '../../../core/use-cases/auth/register-user.usecase';
 import { LoginUserUseCase } from 'src/core/use-cases/auth/login-user.usecase';
 import { LoginWithGoogleUseCase } from 'src/core/use-cases/auth/login-with-google.usecase';
+import { ConfirmEmailUseCase } from '../../../core/use-cases/auth/confirm-email.usecase';
 
 @Resolver()
 export class AuthResolver {
@@ -11,16 +12,24 @@ export class AuthResolver {
         private readonly registerUserUseCase: RegisterUserUseCase,
         private readonly loginUserUseCase: LoginUserUseCase,
         private readonly loginWithGoogleUseCase: LoginWithGoogleUseCase,
+        private readonly confirmEmailUseCase: ConfirmEmailUseCase,
     ) { }
 
     @Mutation(() => AuthOutput)
     async userRegister(
         @Args('input') input: RegisterInput,
     ): Promise<AuthOutput> {
-        const user = await this.registerUserUseCase.execute(input.email, input.password);
+        const user = await this.registerUserUseCase.execute(
+            input.name,
+            input.email,
+            input.phone,
+            input.password,
+        );
         return {
             id: user.id,
+            name: user.name,
             email: user.email,
+            phone: user.phone,
         };
     }
 
@@ -42,5 +51,18 @@ export class AuthResolver {
         return {
             accessToken: result.accessToken,
         };
+    }
+
+    @Mutation(() => Boolean)
+    async confirmEmail(
+        @Args('token') token: string,
+    ): Promise<boolean> {
+        try {
+            await this.confirmEmailUseCase.execute(token);
+            return true;
+        } catch (error) {
+            console.error('Erro ao confirmar email:', error);
+            return false;
+        }
     }
 }

@@ -3,11 +3,18 @@ import { InputType, Field } from '@nestjs/graphql';
 @InputType()
 export class RegisterInput {
   @Field()
+  name: string;
+
+  @Field()
   email: string;
+
+  @Field()
+  phone: string;
 
   @Field()
   password: string;
 }
+
 
 @InputType()
 export class LoginInput {

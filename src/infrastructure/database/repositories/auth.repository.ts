@@ -13,24 +13,40 @@ export class AuthRepositoryImpl implements AuthRepository {
   ) { }
 
   async findByEmail(email: string): Promise<User | null> {
-
     const userDoc = await this.userModel.findOne({ email });
 
     if (!userDoc) return null;
 
-    return new User(userDoc._id.toString(), userDoc.email, userDoc.password);
+    return new User(
+      userDoc._id.toString(),
+      userDoc.name,
+      userDoc.email,
+      userDoc.phone,
+      userDoc.password,
+    );
   }
 
   async create(user: User): Promise<User> {
     const created = await this.userModel.create({
+      name: user.name,
       email: user.email,
+      phone: user.phone,
       password: user.password,
     });
 
     return new User(
       created._id.toString(),
+      created.name,
       created.email,
+      created.phone,
       created.password,
+    );
+  }
+
+  async confirmEmail(userId: string): Promise<void> {
+    await this.userModel.updateOne(
+      { _id: userId },
+      { $set: { emailVerified: true } },
     );
   }
 }
