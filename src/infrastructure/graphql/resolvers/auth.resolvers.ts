@@ -5,6 +5,10 @@ import { RegisterUserUseCase } from '../../../core/use-cases/auth/register-user.
 import { LoginUserUseCase } from 'src/core/use-cases/auth/login-user.usecase';
 import { LoginWithGoogleUseCase } from 'src/core/use-cases/auth/login-with-google.usecase';
 import { ConfirmEmailUseCase } from '../../../core/use-cases/auth/confirm-email.usecase';
+import { ResetPasswordInput } from '../dto/reset-password.input';
+import { ForgotPasswordInput } from '../dto/forgot-password.input';
+import { RequestPasswordResetUseCase } from 'src/core/use-cases/auth/request-password-reset.usecase';
+import { ResetPasswordUseCase } from 'src/core/use-cases/auth/reset-password.usecase';
 
 @Resolver()
 export class AuthResolver {
@@ -13,6 +17,8 @@ export class AuthResolver {
         private readonly loginUserUseCase: LoginUserUseCase,
         private readonly loginWithGoogleUseCase: LoginWithGoogleUseCase,
         private readonly confirmEmailUseCase: ConfirmEmailUseCase,
+        private readonly requestPasswordResetUseCase: RequestPasswordResetUseCase,
+        private readonly resetPasswordUseCase: ResetPasswordUseCase,
     ) { }
 
     @Mutation(() => AuthOutput)
@@ -64,5 +70,17 @@ export class AuthResolver {
             console.error('Erro ao confirmar email:', error);
             return false;
         }
+    }
+
+    @Mutation(() => Boolean)
+    async forgotPassword(@Args('input') input: ForgotPasswordInput) {
+        await this.requestPasswordResetUseCase.execute(input.email);
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    async resetPassword(@Args('input') input: ResetPasswordInput) {
+        await this.resetPasswordUseCase.execute(input.token, input.newPassword);
+        return true;
     }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 
 @Injectable()
-export class ConfirmEmailService {
+export class SendEmailService {
     private transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {

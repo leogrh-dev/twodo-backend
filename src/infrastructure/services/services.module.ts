@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ConfirmEmailService } from './confirm-email/confirm-email.service';
+import { SendEmailService } from './send-email/send-email.service';
 
 @Module({
-  providers: [ConfirmEmailService],
-  exports: [ConfirmEmailService],
+  providers: [SendEmailService],
+  exports: [SendEmailService],
 })
 export class ServicesModule {}

@@ -27,6 +27,7 @@ export class LoginUserUseCase {
       {
         sub: user.id,
         email: user.email,
+        emailVerified: user.emailVerified,
       },
       process.env.JWT_SECRET || 'default-secret',
       {
@@ -36,5 +37,4 @@ export class LoginUserUseCase {
 
     return { accessToken };
   }
-
 }

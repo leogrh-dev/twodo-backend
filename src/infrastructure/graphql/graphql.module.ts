@@ -15,6 +15,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthResolver } from './resolvers/auth.resolvers';
 import { HelloResolver } from './resolvers/hello-world.resolvers';
 import { ServicesModule } from '../services/services.module'; // 🔥 IMPORTANTE
+import { RequestPasswordResetUseCase } from 'src/core/use-cases/auth/request-password-reset.usecase';
+import { ResetPasswordUseCase } from 'src/core/use-cases/auth/reset-password.usecase';
 
 @Module({
     imports: [
@@ -34,6 +36,8 @@ import { ServicesModule } from '../services/services.module'; // 🔥 IMPORTANTE
         LoginUserUseCase,
         LoginWithGoogleUseCase,
         ConfirmEmailUseCase,
+        RequestPasswordResetUseCase,
+        ResetPasswordUseCase,
         HelloResolver,
         {
             provide: 'AuthRepository',

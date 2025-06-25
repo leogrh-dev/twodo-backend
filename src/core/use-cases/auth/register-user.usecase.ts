@@ -3,7 +3,7 @@ import { AuthRepository } from '../../../application/interfaces/auth-repository.
 import { User } from '../../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { ConfirmEmailService } from '../../../infrastructure/services/confirm-email/confirm-email.service';
+import { SendEmailService } from 'src/infrastructure/services/send-email/send-email.service';
 
 @Injectable()
 export class RegisterUserUseCase {
@@ -11,7 +11,7 @@ export class RegisterUserUseCase {
     @Inject('AuthRepository')
     private readonly authRepository: AuthRepository,
 
-    private readonly confirmEmailService: ConfirmEmailService, // Serviço de envio de email
+    private readonly sendEmailService: SendEmailService,
   ) { }
 
   async execute(
@@ -46,7 +46,7 @@ export class RegisterUserUseCase {
 
     const confirmLink = `http://localhost:4200/confirm-email?token=${token}`;
 
-    await this.confirmEmailService.sendEmail(
+    await this.sendEmailService.sendEmail(
       createdUser.email,
       'Confirme seu email no TwoDo',
       `

@@ -23,6 +23,7 @@ export class AuthRepositoryImpl implements AuthRepository {
       userDoc.email,
       userDoc.phone,
       userDoc.password,
+      userDoc.emailVerified,
     );
   }
 
@@ -47,6 +48,13 @@ export class AuthRepositoryImpl implements AuthRepository {
     await this.userModel.updateOne(
       { _id: userId },
       { $set: { emailVerified: true } },
+    );
+  }
+
+  async updatePassword(userId: string, hashedPassword: string): Promise<void> {
+    await this.userModel.updateOne(
+      { _id: userId },
+      { $set: { password: hashedPassword } },
     );
   }
 }
