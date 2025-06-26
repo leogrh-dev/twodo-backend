@@ -22,6 +22,7 @@ type Mutation {
   userLogin(input: LoginInput!): AuthTokenOutput!
   userLoginWithGoogle(input: GoogleLoginInput!): AuthTokenOutput!
   confirmEmail(token: String!): Boolean!
+  resendConfirmationEmail(input: ResendConfirmationEmailInput!): Boolean!
   forgotPassword(input: ForgotPasswordInput!): Boolean!
   resetPassword(input: ResetPasswordInput!): Boolean!
 }
@@ -40,6 +41,10 @@ input LoginInput {
 
 input GoogleLoginInput {
   idToken: String!
+}
+
+input ResendConfirmationEmailInput {
+  email: String!
 }
 
 input ForgotPasswordInput {

@@ -30,3 +30,9 @@ export class GoogleLoginInput {
   @Field()
   idToken: string;
 }
+
+@InputType()
+export class ResendConfirmationEmailInput {
+  @Field()
+  email: string;
+}

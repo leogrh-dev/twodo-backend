@@ -17,6 +17,7 @@ import { HelloResolver } from './resolvers/hello-world.resolvers';
 import { ServicesModule } from '../services/services.module'; // 🔥 IMPORTANTE
 import { RequestPasswordResetUseCase } from 'src/core/use-cases/auth/request-password-reset.usecase';
 import { ResetPasswordUseCase } from 'src/core/use-cases/auth/reset-password.usecase';
+import { ResendEmailConfirmationUseCase } from 'src/core/use-cases/auth/resend-email-confirmation.usecase';
 
 @Module({
     imports: [
@@ -36,6 +37,7 @@ import { ResetPasswordUseCase } from 'src/core/use-cases/auth/reset-password.use
         LoginUserUseCase,
         LoginWithGoogleUseCase,
         ConfirmEmailUseCase,
+        ResendEmailConfirmationUseCase,
         RequestPasswordResetUseCase,
         ResetPasswordUseCase,
         HelloResolver,

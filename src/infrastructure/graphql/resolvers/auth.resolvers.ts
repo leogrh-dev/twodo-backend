@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
-import { GoogleLoginInput, LoginInput, RegisterInput } from '../dto/auth.input';
+import { GoogleLoginInput, LoginInput, RegisterInput, ResendConfirmationEmailInput } from '../dto/auth.input';
 import { AuthOutput, AuthTokenOutput } from '../dto/auth.output';
 import { RegisterUserUseCase } from '../../../core/use-cases/auth/register-user.usecase';
 import { LoginUserUseCase } from 'src/core/use-cases/auth/login-user.usecase';
@@ -9,6 +9,7 @@ import { ResetPasswordInput } from '../dto/reset-password.input';
 import { ForgotPasswordInput } from '../dto/forgot-password.input';
 import { RequestPasswordResetUseCase } from 'src/core/use-cases/auth/request-password-reset.usecase';
 import { ResetPasswordUseCase } from 'src/core/use-cases/auth/reset-password.usecase';
+import { ResendEmailConfirmationUseCase } from 'src/core/use-cases/auth/resend-email-confirmation.usecase';
 
 @Resolver()
 export class AuthResolver {
@@ -19,6 +20,7 @@ export class AuthResolver {
         private readonly confirmEmailUseCase: ConfirmEmailUseCase,
         private readonly requestPasswordResetUseCase: RequestPasswordResetUseCase,
         private readonly resetPasswordUseCase: ResetPasswordUseCase,
+        private readonly resendEmailConfirmationUseCase: ResendEmailConfirmationUseCase,
     ) { }
 
     @Mutation(() => AuthOutput)
@@ -70,6 +72,14 @@ export class AuthResolver {
             console.error('Erro ao confirmar email:', error);
             return false;
         }
+    }
+
+    @Mutation(() => Boolean)
+    async resendConfirmationEmail(
+        @Args('input') input: ResendConfirmationEmailInput,
+    ): Promise<boolean> {
+        await this.resendEmailConfirmationUseCase.execute(input.email);
+        return true;
     }
 
     @Mutation(() => Boolean)
