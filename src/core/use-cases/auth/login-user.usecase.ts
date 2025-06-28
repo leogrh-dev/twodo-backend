@@ -25,14 +25,16 @@ export class LoginUserUseCase {
 
     const accessToken = jwt.sign(
       {
-        sub: user.id,
+        userId: user.id,
+        name: user.name,
         email: user.email,
+        phone: user.phone,
         emailVerified: user.emailVerified,
       },
       process.env.JWT_SECRET || 'default-secret',
       {
         expiresIn,
-      },
+      }
     );
 
     return { accessToken };
