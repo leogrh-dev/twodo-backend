@@ -18,6 +18,10 @@ import { ServicesModule } from '../services/services.module'; // 🔥 IMPORTANTE
 import { RequestPasswordResetUseCase } from 'src/core/use-cases/auth/request-password-reset.usecase';
 import { ResetPasswordUseCase } from 'src/core/use-cases/auth/reset-password.usecase';
 import { ResendEmailConfirmationUseCase } from 'src/core/use-cases/auth/resend-email-confirmation.usecase';
+import { NoteRepositoryImpl } from '../database/repositories/note.repository';
+import { CreateNoteUseCase } from 'src/core/use-cases/note/create-note.usecase';
+import { NoteResolver } from './resolvers/note.resolvers';
+import { Note, NoteSchema } from '../database/models/note.schema';
 
 @Module({
     imports: [
@@ -25,9 +29,11 @@ import { ResendEmailConfirmationUseCase } from 'src/core/use-cases/auth/resend-e
             driver: ApolloDriver,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
             playground: true,
+            context: ({ req }) => ({ req }),
         }),
         MongooseModule.forFeature([
             { name: UserModel.name, schema: UserSchema },
+            { name: Note.name, schema: NoteSchema },
         ]),
         ServicesModule,
     ],
@@ -44,6 +50,12 @@ import { ResendEmailConfirmationUseCase } from 'src/core/use-cases/auth/resend-e
         {
             provide: 'AuthRepository',
             useClass: AuthRepositoryImpl,
+        },
+        NoteResolver,
+        CreateNoteUseCase,
+        {
+            provide: 'NoteRepository',
+            useClass: NoteRepositoryImpl,
         },
     ],
 })

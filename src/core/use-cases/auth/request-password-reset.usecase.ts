@@ -8,7 +8,7 @@ export class RequestPasswordResetUseCase {
   constructor(
     @Inject('AuthRepository') private readonly authRepo: AuthRepository,
     private readonly emailService: SendEmailService,
-  ) {}
+  ) { }
 
   async execute(email: string): Promise<void> {
     const user = await this.authRepo.findByEmail(email);

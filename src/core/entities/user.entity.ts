@@ -6,5 +6,5 @@ export class User {
     public readonly phone: string,
     public readonly password: string,
     public readonly emailVerified: boolean = false,
-  ) {}
+  ) { }
 }
