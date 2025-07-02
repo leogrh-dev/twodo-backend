@@ -6,7 +6,8 @@ import { SendEmailService } from 'src/infrastructure/services/send-email/send-em
 @Injectable()
 export class RequestPasswordResetUseCase {
   constructor(
-    @Inject('AuthRepository') private readonly authRepo: AuthRepository,
+    @Inject('AuthRepository')
+    private readonly authRepo: AuthRepository,
     private readonly emailService: SendEmailService,
   ) { }
 

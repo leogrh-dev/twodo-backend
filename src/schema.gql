@@ -30,6 +30,8 @@ scalar DateTime
 
 type Query {
   hello: String!
+  getNoteById(id: String!): NoteOutput!
+  getUserNotes: [NoteOutput!]!
 }
 
 type Mutation {
@@ -41,6 +43,7 @@ type Mutation {
   forgotPassword(input: ForgotPasswordInput!): Boolean!
   resetPassword(input: ResetPasswordInput!): Boolean!
   createNote: NoteOutput!
+  updateNoteTitle(input: UpdateNoteTitleInput!): NoteOutput!
 }
 
 input RegisterInput {
@@ -70,4 +73,9 @@ input ForgotPasswordInput {
 input ResetPasswordInput {
   token: String!
   newPassword: String!
+}
+
+input UpdateNoteTitleInput {
+  id: String!
+  title: String!
 }

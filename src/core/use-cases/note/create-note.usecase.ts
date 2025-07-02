@@ -1,5 +1,3 @@
-// src/core/use-cases/note/create-note.usecase.ts
-
 import { Inject, Injectable } from '@nestjs/common';
 import { Note } from '../../entities/note.entity';
 import { NoteRepository } from '../../../application/interfaces/note-repository.interface';
@@ -12,7 +10,6 @@ interface CreateNoteInput {
 @Injectable()
 export class CreateNoteUseCase {
     constructor(
-        @Inject('NoteRepository')
         private readonly noteRepository: NoteRepository,
     ) { }
 

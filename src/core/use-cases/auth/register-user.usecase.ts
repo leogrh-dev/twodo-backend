@@ -10,7 +10,6 @@ export class RegisterUserUseCase {
   constructor(
     @Inject('AuthRepository')
     private readonly authRepository: AuthRepository,
-
     private readonly sendEmailService: SendEmailService,
   ) { }
 

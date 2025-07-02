@@ -17,11 +17,6 @@ export class NoteRepositoryImpl implements NoteRepository {
         return this.toEntity(created);
     }
 
-    async findById(id: string): Promise<NoteEntity | null> {
-        const doc = await this.Note.findOne({ id }).exec();
-        return doc ? this.toEntity(doc) : null;
-    }
-
     async update(note: NoteEntity): Promise<NoteEntity> {
         const updated = await this.Note
             .findOneAndUpdate({ id: note.id }, note, { new: true })
@@ -31,8 +26,46 @@ export class NoteRepositoryImpl implements NoteRepository {
         return this.toEntity(updated);
     }
 
+    async updateTitle(noteId: string, title: string): Promise<NoteEntity> {
+        const updated = await this.Note
+            .findOneAndUpdate(
+                { id: noteId },
+                { title: title.trim() || 'Nova página', updatedAt: new Date() },
+                { new: true }
+            )
+            .exec();
+
+        if (!updated) throw new Error('Note not found');
+        return this.toEntity(updated);
+    }
+
     async delete(id: string): Promise<void> {
         await this.Note.deleteOne({ id }).exec();
+    }
+
+    async findByOwner(ownerId: string, limit = 10): Promise<NoteEntity[]> {
+        const docs = await this.Note
+            .find({ ownerId })
+            .sort({ updatedAt: -1 })
+            .limit(limit)
+            .exec();
+
+        return docs.map(doc => this.toEntity(doc));
+    }
+
+    async findById(noteId: string): Promise<NoteEntity | null> {
+        const doc = await this.Note.findOne({ id: noteId }).lean();
+        if (!doc) return null;
+
+        return new NoteEntity(
+            doc.id,
+            doc.title,
+            doc.content,
+            doc.ownerId,
+            doc.bannerUrl,
+            doc.createdAt,
+            doc.updatedAt
+        );
     }
 
     private toEntity(doc: NoteDocument): NoteEntity {

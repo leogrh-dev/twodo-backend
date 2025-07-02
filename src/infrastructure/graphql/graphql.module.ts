@@ -22,6 +22,10 @@ import { NoteRepositoryImpl } from '../database/repositories/note.repository';
 import { CreateNoteUseCase } from 'src/core/use-cases/note/create-note.usecase';
 import { NoteResolver } from './resolvers/note.resolvers';
 import { Note, NoteSchema } from '../database/models/note.schema';
+import { FindNotesByOwnerUseCase } from 'src/core/use-cases/note/find-notes-by-owner.usecase';
+import { FindNoteByIdUseCase } from 'src/core/use-cases/note/find-note-by-id.usecase';
+import { NoteRepository } from 'src/application/interfaces/note-repository.interface';
+import { UpdateNoteTitleUseCase } from 'src/core/use-cases/note/update-note-title.usecase';
 
 @Module({
     imports: [
@@ -53,8 +57,11 @@ import { Note, NoteSchema } from '../database/models/note.schema';
         },
         NoteResolver,
         CreateNoteUseCase,
+        UpdateNoteTitleUseCase,
+        FindNotesByOwnerUseCase,
+        FindNoteByIdUseCase,
         {
-            provide: 'NoteRepository',
+            provide: NoteRepository,
             useClass: NoteRepositoryImpl,
         },
     ],

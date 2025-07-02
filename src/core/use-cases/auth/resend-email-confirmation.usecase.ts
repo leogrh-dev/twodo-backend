@@ -6,9 +6,10 @@ import { SendEmailService } from 'src/infrastructure/services/send-email/send-em
 @Injectable()
 export class ResendEmailConfirmationUseCase {
   constructor(
-    @Inject('AuthRepository') private readonly authRepository: AuthRepository,
+    @Inject('AuthRepository')
+    private readonly authRepository: AuthRepository,
     private readonly sendEmailService: SendEmailService,
-  ) {}
+  ) { }
 
   async execute(email: string): Promise<void> {
     const user = await this.authRepository.findByEmail(email);

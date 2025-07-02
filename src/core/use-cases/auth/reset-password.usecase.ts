@@ -6,8 +6,9 @@ import { AuthRepository } from '../../../application/interfaces/auth-repository.
 @Injectable()
 export class ResetPasswordUseCase {
   constructor(
-    @Inject('AuthRepository') private readonly authRepo: AuthRepository
-  ) {}
+    @Inject('AuthRepository')
+    private readonly authRepo: AuthRepository
+  ) { }
 
   async execute(token: string, newPassword: string): Promise<void> {
     try {
