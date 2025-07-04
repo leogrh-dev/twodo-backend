@@ -26,6 +26,7 @@ import { FindNotesByOwnerUseCase } from 'src/core/use-cases/note/find-notes-by-o
 import { FindNoteByIdUseCase } from 'src/core/use-cases/note/find-note-by-id.usecase';
 import { NoteRepository } from 'src/application/interfaces/note-repository.interface';
 import { UpdateNoteTitleUseCase } from 'src/core/use-cases/note/update-note-title.usecase';
+import { UpdateNoteContentUseCase } from 'src/core/use-cases/note/update-note-content.usecase';
 
 @Module({
     imports: [
@@ -58,6 +59,7 @@ import { UpdateNoteTitleUseCase } from 'src/core/use-cases/note/update-note-titl
         NoteResolver,
         CreateNoteUseCase,
         UpdateNoteTitleUseCase,
+        UpdateNoteContentUseCase,
         FindNotesByOwnerUseCase,
         FindNoteByIdUseCase,
         {

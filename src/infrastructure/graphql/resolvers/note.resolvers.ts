@@ -7,10 +7,11 @@ import { FindNotesByOwnerUseCase } from '../../../core/use-cases/note/find-notes
 import { UpdateNoteTitleUseCase } from '../../../core/use-cases/note/update-note-title.usecase';
 
 import { NoteOutput } from '../dto/note.output';
-import { UpdateNoteTitleInput } from '../dto/note.input';
+import { UpdateNoteContentInput, UpdateNoteTitleInput } from '../dto/note.input';
 
 import { AuthGuard } from '../../../shared/guards/auth.guard';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
+import { UpdateNoteContentUseCase } from 'src/core/use-cases/note/update-note-content.usecase';
 
 @Resolver(() => NoteOutput)
 export class NoteResolver {
@@ -19,6 +20,7 @@ export class NoteResolver {
         private readonly findNoteByIdUseCase: FindNoteByIdUseCase,
         private readonly findNotesByOwnerUseCase: FindNotesByOwnerUseCase,
         private readonly updateNoteTitleUseCase: UpdateNoteTitleUseCase,
+        private readonly updateNoteContentUseCase: UpdateNoteContentUseCase, 
     ) { }
 
     @Mutation(() => NoteOutput)
@@ -62,6 +64,21 @@ export class NoteResolver {
         );
         return this.toOutput(updated);
     }
+
+    @Mutation(() => NoteOutput)
+    @UseGuards(AuthGuard)
+    async updateNoteContent(
+        @Args('input') input: UpdateNoteContentInput,
+        @CurrentUser() user: { userId: string }
+    ): Promise<NoteOutput> {
+        const updated = await this.updateNoteContentUseCase.execute(
+            input.id,
+            input.content,
+            user.userId
+        );
+        return this.toOutput(updated);
+    }
+
 
     private toOutput(note: {
         id: string;

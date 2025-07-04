@@ -13,3 +13,12 @@ export class UpdateNoteTitleInput {
   @Field()
   title: string;
 }
+
+@InputType()
+export class UpdateNoteContentInput {
+  @Field()
+  id: string;
+
+  @Field()
+  content: string;
+}

@@ -44,6 +44,7 @@ type Mutation {
   resetPassword(input: ResetPasswordInput!): Boolean!
   createNote: NoteOutput!
   updateNoteTitle(input: UpdateNoteTitleInput!): NoteOutput!
+  updateNoteContent(input: UpdateNoteContentInput!): NoteOutput!
 }
 
 input RegisterInput {
@@ -78,4 +79,9 @@ input ResetPasswordInput {
 input UpdateNoteTitleInput {
   id: String!
   title: String!
+}
+
+input UpdateNoteContentInput {
+  id: String!
+  content: String!
 }
