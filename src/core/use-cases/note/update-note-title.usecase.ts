@@ -16,7 +16,7 @@ export class UpdateNoteTitleUseCase {
       throw new Error('Você não tem permissão para alterar esta nota');
     }
 
-    note.updateTitle(newTitle.trim() || 'Nova página');
+    note.updateTitle(newTitle.trim());
 
     return this.noteRepository.update(note);
   }

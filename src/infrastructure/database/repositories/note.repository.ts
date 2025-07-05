@@ -30,7 +30,7 @@ export class NoteRepositoryImpl implements NoteRepository {
         const updated = await this.Note
             .findOneAndUpdate(
                 { id: noteId },
-                { title: title.trim() || 'Nova página', updatedAt: new Date() },
+                { title: title.trim(), updatedAt: new Date() },
                 { new: true }
             )
             .exec();

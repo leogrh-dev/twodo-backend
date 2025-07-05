@@ -6,7 +6,7 @@ export class Note {
   @Prop({ required: true })
   id: string;
 
-  @Prop({ required: true })
+  @Prop()
   title: string;
 
   @Prop()
