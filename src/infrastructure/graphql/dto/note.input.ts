@@ -22,3 +22,18 @@ export class UpdateNoteContentInput {
   @Field()
   content: string;
 }
+
+@InputType()
+export class UpdateNoteBannerInput {
+  @Field()
+  id: string;
+
+  @Field()
+  bannerUrl: string;
+}
+
+@InputType()
+export class RemoveNoteBannerInput {
+  @Field()
+  id: string;
+}

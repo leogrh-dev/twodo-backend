@@ -27,6 +27,9 @@ import { FindNoteByIdUseCase } from 'src/core/use-cases/note/find-note-by-id.use
 import { NoteRepository } from 'src/application/interfaces/note-repository.interface';
 import { UpdateNoteTitleUseCase } from 'src/core/use-cases/note/update-note-title.usecase';
 import { UpdateNoteContentUseCase } from 'src/core/use-cases/note/update-note-content.usecase';
+import { UpdateNoteBannerUseCase } from 'src/core/use-cases/note/update-note-banner.usecase';
+import { RemoveNoteBannerUseCase } from 'src/core/use-cases/note/remove-note-banner.usecase';
+import { UploadModule } from '../upload/upload.module';
 
 @Module({
     imports: [
@@ -41,6 +44,7 @@ import { UpdateNoteContentUseCase } from 'src/core/use-cases/note/update-note-co
             { name: Note.name, schema: NoteSchema },
         ]),
         ServicesModule,
+        UploadModule,
     ],
     providers: [
         AuthResolver,
@@ -60,6 +64,8 @@ import { UpdateNoteContentUseCase } from 'src/core/use-cases/note/update-note-co
         CreateNoteUseCase,
         UpdateNoteTitleUseCase,
         UpdateNoteContentUseCase,
+        UpdateNoteBannerUseCase,
+        RemoveNoteBannerUseCase,
         FindNotesByOwnerUseCase,
         FindNoteByIdUseCase,
         {

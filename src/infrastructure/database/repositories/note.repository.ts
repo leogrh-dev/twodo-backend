@@ -19,10 +19,20 @@ export class NoteRepositoryImpl implements NoteRepository {
 
     async update(note: NoteEntity): Promise<NoteEntity> {
         const updated = await this.Note
-            .findOneAndUpdate({ id: note.id }, note, { new: true })
+            .findOneAndUpdate(
+                { id: note.id },
+                {
+                    title: note.title,
+                    content: note.content,
+                    bannerUrl: note.bannerUrl,
+                    updatedAt: note.updatedAt,
+                },
+                { new: true }
+            )
             .exec();
 
         if (!updated) throw new Error('Note not found');
+
         return this.toEntity(updated);
     }
 

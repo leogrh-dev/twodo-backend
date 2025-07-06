@@ -4,7 +4,7 @@ export class Note {
         public title: string,
         public content: string,
         public ownerId: string,
-        public bannerUrl?: string,
+        public bannerUrl: string | null = null,
         public createdAt: Date = new Date(),
         public updatedAt: Date = new Date(),
     ) { }
@@ -19,7 +19,7 @@ export class Note {
         this.updatedAt = new Date();
     }
 
-    updateBanner(newBannerUrl: string) {
+    updateBanner(newBannerUrl: string | null) {
         this.bannerUrl = newBannerUrl;
         this.updatedAt = new Date();
     }

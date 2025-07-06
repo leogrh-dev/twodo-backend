@@ -1,17 +1,20 @@
 import { Resolver, Mutation, Query, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 
+import { Note } from '../../../core/entities/note.entity';
 import { CreateNoteUseCase } from '../../../core/use-cases/note/create-note.usecase';
 import { FindNoteByIdUseCase } from '../../../core/use-cases/note/find-note-by-id.usecase';
 import { FindNotesByOwnerUseCase } from '../../../core/use-cases/note/find-notes-by-owner.usecase';
 import { UpdateNoteTitleUseCase } from '../../../core/use-cases/note/update-note-title.usecase';
+import { UpdateNoteBannerUseCase } from 'src/core/use-cases/note/update-note-banner.usecase';
+import { UpdateNoteContentUseCase } from 'src/core/use-cases/note/update-note-content.usecase';
+import { RemoveNoteBannerUseCase } from 'src/core/use-cases/note/remove-note-banner.usecase';
 
 import { NoteOutput } from '../dto/note.output';
-import { UpdateNoteContentInput, UpdateNoteTitleInput } from '../dto/note.input';
+import { RemoveNoteBannerInput, UpdateNoteBannerInput, UpdateNoteContentInput, UpdateNoteTitleInput } from '../dto/note.input';
 
 import { AuthGuard } from '../../../shared/guards/auth.guard';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
-import { UpdateNoteContentUseCase } from 'src/core/use-cases/note/update-note-content.usecase';
 
 @Resolver(() => NoteOutput)
 export class NoteResolver {
@@ -20,7 +23,9 @@ export class NoteResolver {
         private readonly findNoteByIdUseCase: FindNoteByIdUseCase,
         private readonly findNotesByOwnerUseCase: FindNotesByOwnerUseCase,
         private readonly updateNoteTitleUseCase: UpdateNoteTitleUseCase,
-        private readonly updateNoteContentUseCase: UpdateNoteContentUseCase, 
+        private readonly updateNoteContentUseCase: UpdateNoteContentUseCase,
+        private readonly updateNoteBannerUseCase: UpdateNoteBannerUseCase,
+        private readonly removeNoteBannerUseCase: RemoveNoteBannerUseCase,
     ) { }
 
     @Mutation(() => NoteOutput)
@@ -79,22 +84,33 @@ export class NoteResolver {
         return this.toOutput(updated);
     }
 
+    @Mutation(() => NoteOutput)
+    @UseGuards(AuthGuard)
+    async updateNoteBanner(
+        @Args('input') input: UpdateNoteBannerInput,
+        @CurrentUser() user: { userId: string },
+    ): Promise<NoteOutput> {
+        const note = await this.updateNoteBannerUseCase.execute(input.id, input.bannerUrl, user.userId);
+        return this.toOutput(note);
+    }
 
-    private toOutput(note: {
-        id: string;
-        title: string;
-        content: string;
-        ownerId: string;
-        bannerUrl?: string;
-        createdAt: Date;
-        updatedAt: Date;
-    }): NoteOutput {
+    @Mutation(() => NoteOutput)
+    @UseGuards(AuthGuard)
+    async removeNoteBanner(
+        @Args('input') input: RemoveNoteBannerInput,
+        @CurrentUser() user: { userId: string },
+    ): Promise<NoteOutput> {
+        const note = await this.removeNoteBannerUseCase.execute(input.id, user.userId);
+        return this.toOutput(note);
+    }
+
+    private toOutput(note: Note): NoteOutput {
         return {
             id: note.id,
             title: note.title,
             content: note.content,
             ownerId: note.ownerId,
-            bannerUrl: note.bannerUrl,
+            bannerUrl: note.bannerUrl ?? null,
             createdAt: note.createdAt,
             updatedAt: note.updatedAt,
         };

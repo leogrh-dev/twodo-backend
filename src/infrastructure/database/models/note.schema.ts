@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Note {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   id: string;
 
   @Prop()
@@ -25,3 +25,7 @@ export type NoteDocument = Note & Document & {
 };
 
 export const NoteSchema = SchemaFactory.createForClass(Note);
+
+NoteSchema.set('strict', true);
+
+NoteSchema.index({ id: 1 }, { unique: true });

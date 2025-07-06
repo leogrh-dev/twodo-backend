@@ -14,8 +14,8 @@ export class NoteOutput {
     @Field()
     ownerId: string;
 
-    @Field({ nullable: true })
-    bannerUrl?: string;
+    @Field(() => String, { nullable: true })
+    bannerUrl?: string | null;
 
     @Field()
     createdAt: Date;

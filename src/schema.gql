@@ -45,6 +45,8 @@ type Mutation {
   createNote: NoteOutput!
   updateNoteTitle(input: UpdateNoteTitleInput!): NoteOutput!
   updateNoteContent(input: UpdateNoteContentInput!): NoteOutput!
+  updateNoteBanner(input: UpdateNoteBannerInput!): NoteOutput!
+  removeNoteBanner(input: RemoveNoteBannerInput!): NoteOutput!
 }
 
 input RegisterInput {
@@ -84,4 +86,13 @@ input UpdateNoteTitleInput {
 input UpdateNoteContentInput {
   id: String!
   content: String!
+}
+
+input UpdateNoteBannerInput {
+  id: String!
+  bannerUrl: String!
+}
+
+input RemoveNoteBannerInput {
+  id: String!
 }

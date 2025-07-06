@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { FileStoragePort, UploadFileInput } from '../../../application/interfaces/file-storage.interface';
 import { randomUUID } from 'crypto';
 
@@ -27,5 +27,14 @@ export class S3StorageService implements FileStoragePort {
         await this.s3.send(command);
 
         return `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+    }
+
+    async delete(key: string): Promise<void> {
+        const command = new DeleteObjectCommand({
+            Bucket: process.env.AWS_S3_BUCKET!,
+            Key: key,
+        });
+
+        await this.s3.send(command);
     }
 }

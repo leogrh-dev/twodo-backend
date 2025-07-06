@@ -6,4 +6,5 @@ export interface UploadFileInput {
 
 export interface FileStoragePort {
     upload(file: UploadFileInput): Promise<string>;
+    delete(key: string): Promise<void>;
 }
