@@ -1,34 +1,41 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
+
+import { UserModel, UserSchema } from '../database/models/user.schema';
+import { Note, NoteSchema } from '../database/models/note.schema';
+
+import { AuthRepositoryImpl } from '../database/repositories/auth.repository';
+import { NoteRepositoryImpl } from '../database/repositories/note.repository';
+
+import { NoteRepository } from 'src/application/interfaces/note-repository.interface';
 
 import { RegisterUserUseCase } from '../../core/use-cases/auth/register-user.usecase';
 import { LoginUserUseCase } from '../../core/use-cases/auth/login-user.usecase';
 import { LoginWithGoogleUseCase } from '../../core/use-cases/auth/login-with-google.usecase';
 import { ConfirmEmailUseCase } from '../../core/use-cases/auth/confirm-email.usecase';
-
-import { AuthRepositoryImpl } from '../database/repositories/auth.repository';
-import { UserModel, UserSchema } from '../database/models/user.schema';
-
-import { MongooseModule } from '@nestjs/mongoose';
-import { AuthResolver } from './resolvers/auth.resolvers';
-import { HelloResolver } from './resolvers/hello-world.resolvers';
-import { ServicesModule } from '../services/services.module'; // 🔥 IMPORTANTE
+import { ResendEmailConfirmationUseCase } from 'src/core/use-cases/auth/resend-email-confirmation.usecase';
 import { RequestPasswordResetUseCase } from 'src/core/use-cases/auth/request-password-reset.usecase';
 import { ResetPasswordUseCase } from 'src/core/use-cases/auth/reset-password.usecase';
-import { ResendEmailConfirmationUseCase } from 'src/core/use-cases/auth/resend-email-confirmation.usecase';
-import { NoteRepositoryImpl } from '../database/repositories/note.repository';
+
 import { CreateNoteUseCase } from 'src/core/use-cases/note/create-note.usecase';
-import { NoteResolver } from './resolvers/note.resolvers';
-import { Note, NoteSchema } from '../database/models/note.schema';
 import { FindNotesByOwnerUseCase } from 'src/core/use-cases/note/find-notes-by-owner.usecase';
 import { FindNoteByIdUseCase } from 'src/core/use-cases/note/find-note-by-id.usecase';
-import { NoteRepository } from 'src/application/interfaces/note-repository.interface';
 import { UpdateNoteTitleUseCase } from 'src/core/use-cases/note/update-note-title.usecase';
 import { UpdateNoteContentUseCase } from 'src/core/use-cases/note/update-note-content.usecase';
 import { UpdateNoteBannerUseCase } from 'src/core/use-cases/note/update-note-banner.usecase';
 import { RemoveNoteBannerUseCase } from 'src/core/use-cases/note/remove-note-banner.usecase';
+import { DeleteNoteUseCase } from 'src/core/use-cases/note/delete-note.usecase';
+import { GetDeletedNotesUseCase } from 'src/core/use-cases/note/get-deleted-notes.usecase';
+import { RestoreNoteUseCase } from 'src/core/use-cases/note/restore-note.usecase';
+import { PermanentlyDeleteNoteUseCase } from 'src/core/use-cases/note/permanently-delete-note.usecase';
+
+import { AuthResolver } from './resolvers/auth.resolvers';
+import { NoteResolver } from './resolvers/note.resolvers';
+
+import { ServicesModule } from '../services/services.module';
 import { UploadModule } from '../upload/upload.module';
 
 @Module({
@@ -48,6 +55,8 @@ import { UploadModule } from '../upload/upload.module';
     ],
     providers: [
         AuthResolver,
+        NoteResolver,
+
         RegisterUserUseCase,
         LoginUserUseCase,
         LoginWithGoogleUseCase,
@@ -55,19 +64,23 @@ import { UploadModule } from '../upload/upload.module';
         ResendEmailConfirmationUseCase,
         RequestPasswordResetUseCase,
         ResetPasswordUseCase,
-        HelloResolver,
-        {
-            provide: 'AuthRepository',
-            useClass: AuthRepositoryImpl,
-        },
-        NoteResolver,
+
         CreateNoteUseCase,
+        FindNotesByOwnerUseCase,
+        FindNoteByIdUseCase,
         UpdateNoteTitleUseCase,
         UpdateNoteContentUseCase,
         UpdateNoteBannerUseCase,
         RemoveNoteBannerUseCase,
-        FindNotesByOwnerUseCase,
-        FindNoteByIdUseCase,
+        DeleteNoteUseCase,
+        GetDeletedNotesUseCase,
+        RestoreNoteUseCase,
+        PermanentlyDeleteNoteUseCase,
+
+        {
+            provide: 'AuthRepository',
+            useClass: AuthRepositoryImpl,
+        },
         {
             provide: NoteRepository,
             useClass: NoteRepositoryImpl,

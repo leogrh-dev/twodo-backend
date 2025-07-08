@@ -21,6 +21,7 @@ type NoteOutput {
   bannerUrl: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  isDeleted: Boolean!
 }
 
 """
@@ -29,9 +30,9 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Query {
-  hello: String!
   getNoteById(id: String!): NoteOutput!
   getUserNotes: [NoteOutput!]!
+  getDeletedNotes: [NoteOutput!]!
 }
 
 type Mutation {
@@ -47,6 +48,9 @@ type Mutation {
   updateNoteContent(input: UpdateNoteContentInput!): NoteOutput!
   updateNoteBanner(input: UpdateNoteBannerInput!): NoteOutput!
   removeNoteBanner(input: RemoveNoteBannerInput!): NoteOutput!
+  deleteNote(id: String!): Boolean!
+  restoreNote(id: String!): Boolean!
+  permanentlyDeleteNote(id: String!): Boolean!
 }
 
 input RegisterInput {

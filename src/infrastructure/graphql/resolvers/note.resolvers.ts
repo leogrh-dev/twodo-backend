@@ -15,6 +15,10 @@ import { RemoveNoteBannerInput, UpdateNoteBannerInput, UpdateNoteContentInput, U
 
 import { AuthGuard } from '../../../shared/guards/auth.guard';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
+import { GetDeletedNotesUseCase } from 'src/core/use-cases/note/get-deleted-notes.usecase';
+import { DeleteNoteUseCase } from 'src/core/use-cases/note/delete-note.usecase';
+import { RestoreNoteUseCase } from 'src/core/use-cases/note/restore-note.usecase';
+import { PermanentlyDeleteNoteUseCase } from 'src/core/use-cases/note/permanently-delete-note.usecase';
 
 @Resolver(() => NoteOutput)
 export class NoteResolver {
@@ -26,6 +30,10 @@ export class NoteResolver {
         private readonly updateNoteContentUseCase: UpdateNoteContentUseCase,
         private readonly updateNoteBannerUseCase: UpdateNoteBannerUseCase,
         private readonly removeNoteBannerUseCase: RemoveNoteBannerUseCase,
+        private readonly deleteNoteUseCase: DeleteNoteUseCase,
+        private readonly getDeletedNotesUseCase: GetDeletedNotesUseCase,
+        private readonly restoreNoteUseCase: RestoreNoteUseCase,
+        private readonly permanentlyDeleteNoteUseCase: PermanentlyDeleteNoteUseCase,
     ) { }
 
     @Mutation(() => NoteOutput)
@@ -104,6 +112,45 @@ export class NoteResolver {
         return this.toOutput(note);
     }
 
+    @Mutation(() => Boolean)
+    @UseGuards(AuthGuard)
+    async deleteNote(
+        @Args('id') id: string,
+        @CurrentUser() user: { userId: string },
+    ): Promise<boolean> {
+        await this.deleteNoteUseCase.execute(id, user.userId);
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseGuards(AuthGuard)
+    async restoreNote(
+        @Args('id') id: string,
+        @CurrentUser() user: { userId: string },
+    ): Promise<boolean> {
+        await this.restoreNoteUseCase.execute(id, user.userId);
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseGuards(AuthGuard)
+    async permanentlyDeleteNote(
+        @Args('id') id: string,
+        @CurrentUser() user: { userId: string },
+    ): Promise<boolean> {
+        await this.permanentlyDeleteNoteUseCase.execute(id, user.userId);
+        return true;
+    }
+
+    @Query(() => [NoteOutput])
+    @UseGuards(AuthGuard)
+    async getDeletedNotes(
+        @CurrentUser() user: { userId: string },
+    ): Promise<NoteOutput[]> {
+        const notes = await this.getDeletedNotesUseCase.execute(user.userId);
+        return notes.map(this.toOutput);
+    }
+
     private toOutput(note: Note): NoteOutput {
         return {
             id: note.id,
@@ -113,6 +160,7 @@ export class NoteResolver {
             bannerUrl: note.bannerUrl ?? null,
             createdAt: note.createdAt,
             updatedAt: note.updatedAt,
+            isDeleted: note.isDeleted,
         };
     }
 }

@@ -7,6 +7,7 @@ export class Note {
         public bannerUrl: string | null = null,
         public createdAt: Date = new Date(),
         public updatedAt: Date = new Date(),
+        public isDeleted: boolean = false
     ) { }
 
     updateContent(newContent: string) {
@@ -21,6 +22,16 @@ export class Note {
 
     updateBanner(newBannerUrl: string | null) {
         this.bannerUrl = newBannerUrl;
+        this.updatedAt = new Date();
+    }
+
+    delete(): void {
+        this.isDeleted = true;
+        this.updatedAt = new Date();
+    }
+
+    restore(): void {
+        this.isDeleted = false;
         this.updatedAt = new Date();
     }
 }

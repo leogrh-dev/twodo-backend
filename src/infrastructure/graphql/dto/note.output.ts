@@ -22,4 +22,7 @@ export class NoteOutput {
 
     @Field()
     updatedAt: Date;
+
+    @Field()
+    isDeleted: boolean;
 }

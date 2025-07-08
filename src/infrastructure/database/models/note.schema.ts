@@ -17,6 +17,9 @@ export class Note {
 
   @Prop()
   bannerUrl?: string;
+
+  @Prop({ default: false })
+  isDeleted: boolean;
 }
 
 export type NoteDocument = Note & Document & {

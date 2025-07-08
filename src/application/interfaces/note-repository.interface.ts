@@ -6,5 +6,8 @@ export abstract class NoteRepository {
   abstract findByOwner(ownerId: string, limit?: number): Promise<Note[]>;
   abstract update(note: Note): Promise<Note>;
   abstract updateTitle(noteId: string, title: string): Promise<Note>;
-  abstract delete(id: string): Promise<void>;
+  abstract softDelete(id: string): Promise<void>;
+  abstract restore(id: string): Promise<void>;
+  abstract findDeletedByOwner(ownerId: string): Promise<Note[]>;
+  abstract permanentlyDelete(id: string): Promise<void>;
 }

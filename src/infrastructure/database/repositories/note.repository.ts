@@ -49,7 +49,20 @@ export class NoteRepositoryImpl implements NoteRepository {
         return this.toEntity(updated);
     }
 
-    async delete(id: string): Promise<void> {
+    async softDelete(id: string): Promise<void> {
+        await this.Note.findOneAndUpdate({ id }, { isDeleted: true, updatedAt: new Date() }).exec();
+    }
+
+    async restore(id: string): Promise<void> {
+        await this.Note.findOneAndUpdate({ id }, { isDeleted: false, updatedAt: new Date() }).exec();
+    }
+
+    async findDeletedByOwner(ownerId: string): Promise<NoteEntity[]> {
+        const notes = await this.Note.find({ ownerId, isDeleted: true }).sort({ updatedAt: -1 }).exec();
+        return notes.map(doc => this.toEntity(doc));
+    }
+
+    async permanentlyDelete(id: string): Promise<void> {
         await this.Note.deleteOne({ id }).exec();
     }
 
@@ -74,7 +87,8 @@ export class NoteRepositoryImpl implements NoteRepository {
             doc.ownerId,
             doc.bannerUrl,
             doc.createdAt,
-            doc.updatedAt
+            doc.updatedAt,
+            doc.isDeleted
         );
     }
 
@@ -87,6 +101,7 @@ export class NoteRepositoryImpl implements NoteRepository {
             doc.bannerUrl,
             doc.createdAt,
             doc.updatedAt,
+            doc.isDeleted
         );
     }
 }

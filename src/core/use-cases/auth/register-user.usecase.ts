@@ -1,15 +1,23 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { AuthRepository } from '../../../application/interfaces/auth-repository.interface';
-import { User } from '../../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+
+import { AuthRepository } from '../../../application/interfaces/auth-repository.interface';
+import { NoteRepository } from '../../../application/interfaces/note-repository.interface';
+
+import { User } from '../../entities/user.entity';
 import { SendEmailService } from 'src/infrastructure/services/send-email/send-email.service';
+
+import { getDefaultNotesForUser } from './default-notes'; // ✅ novo import
 
 @Injectable()
 export class RegisterUserUseCase {
   constructor(
     @Inject('AuthRepository')
     private readonly authRepository: AuthRepository,
+
+    private readonly noteRepository: NoteRepository,
+
     private readonly sendEmailService: SendEmailService,
   ) { }
 
@@ -37,6 +45,8 @@ export class RegisterUserUseCase {
 
     const createdUser = await this.authRepository.create(user);
 
+    await this.createDefaultNotesForUser(createdUser.id); // ✅ separação limpa
+
     const token = jwt.sign(
       { userId: createdUser.id },
       process.env.JWT_SECRET || 'default-secret',
@@ -58,5 +68,13 @@ export class RegisterUserUseCase {
     );
 
     return createdUser;
+  }
+
+  private async createDefaultNotesForUser(userId: string): Promise<void> {
+    const notes = getDefaultNotesForUser(userId);
+
+    for (const note of notes) {
+      await this.noteRepository.create(note);
+    }
   }
 }
