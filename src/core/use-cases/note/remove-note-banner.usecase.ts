@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { NoteRepository } from '../../../application/interfaces/note-repository.interface';
 import { DeleteFileUseCase } from '../file/delete-file.usecase';
 import { Note } from '../../entities/note.entity';
@@ -6,29 +6,21 @@ import { Note } from '../../entities/note.entity';
 @Injectable()
 export class RemoveNoteBannerUseCase {
   constructor(
+    @Inject(NoteRepository)
     private readonly noteRepository: NoteRepository,
     private readonly deleteFileUseCase: DeleteFileUseCase,
-  ) {}
+  ) { }
 
   async execute(noteId: string, userId: string): Promise<Note> {
     const note = await this.noteRepository.findById(noteId);
-    if (!note) {
-      throw new Error('Nota não encontrada');
-    }
+    if (!note) throw new Error('Nota não encontrada');
+    if (note.ownerId !== userId) throw new Error('Você não tem permissão');
 
-    if (note.ownerId !== userId) {
-      throw new Error('Você não tem permissão para alterar esta nota');
+    if (note.bannerUrl?.startsWith('http')) {
+      await this.deleteFileUseCase.execute(note.bannerUrl);
     }
-
-    const bannerUrl = note.bannerUrl;
 
     note.updateBanner(null);
-    const updated = await this.noteRepository.update(note);
-
-    if (bannerUrl && bannerUrl.startsWith('http')) {
-      await this.deleteFileUseCase.execute(bannerUrl);
-    }
-
-    return updated;
+    return this.noteRepository.update(note);
   }
 }

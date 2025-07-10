@@ -20,6 +20,15 @@ export class Note {
 
   @Prop({ default: false })
   isDeleted: boolean;
+
+  @Prop({ default: false })
+  isFavorite: boolean;
+
+  @Prop()
+  iconUrl?: string;
+
+  @Prop({ type: [String], default: [] })
+  attachedFiles: string[];
 }
 
 export type NoteDocument = Note & Document & {

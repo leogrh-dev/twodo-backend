@@ -25,4 +25,13 @@ export class NoteOutput {
 
     @Field()
     isDeleted: boolean;
+
+    @Field()
+    isFavorite: boolean;
+
+    @Field(() => String, { nullable: true })
+    iconUrl?: string | null;
+
+    @Field(() => [String])
+    attachedFiles: string[];
 }

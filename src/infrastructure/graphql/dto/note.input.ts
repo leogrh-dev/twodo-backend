@@ -37,3 +37,18 @@ export class RemoveNoteBannerInput {
   @Field()
   id: string;
 }
+
+@InputType()
+export class UpdateNoteIconInput {
+  @Field()
+  id: string;
+
+  @Field()
+  iconUrl: string;
+}
+
+@InputType()
+export class RemoveNoteIconInput {
+  @Field()
+  id: string;
+}

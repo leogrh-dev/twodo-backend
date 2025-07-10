@@ -11,7 +11,7 @@ import { UpdateNoteContentUseCase } from 'src/core/use-cases/note/update-note-co
 import { RemoveNoteBannerUseCase } from 'src/core/use-cases/note/remove-note-banner.usecase';
 
 import { NoteOutput } from '../dto/note.output';
-import { RemoveNoteBannerInput, UpdateNoteBannerInput, UpdateNoteContentInput, UpdateNoteTitleInput } from '../dto/note.input';
+import { RemoveNoteBannerInput, RemoveNoteIconInput, UpdateNoteBannerInput, UpdateNoteContentInput, UpdateNoteIconInput, UpdateNoteTitleInput } from '../dto/note.input';
 
 import { AuthGuard } from '../../../shared/guards/auth.guard';
 import { CurrentUser } from '../../../shared/decorators/current-user.decorator';
@@ -19,6 +19,9 @@ import { GetDeletedNotesUseCase } from 'src/core/use-cases/note/get-deleted-note
 import { DeleteNoteUseCase } from 'src/core/use-cases/note/delete-note.usecase';
 import { RestoreNoteUseCase } from 'src/core/use-cases/note/restore-note.usecase';
 import { PermanentlyDeleteNoteUseCase } from 'src/core/use-cases/note/permanently-delete-note.usecase';
+import { ToggleFavoriteNoteUseCase } from 'src/core/use-cases/note/toggle-favorite-note.usecase';
+import { UpdateNoteIconUseCase } from 'src/core/use-cases/note/update-note-icon.usecase';
+import { RemoveNoteIconUseCase } from 'src/core/use-cases/note/remove-note-icon.usecase';
 
 @Resolver(() => NoteOutput)
 export class NoteResolver {
@@ -34,6 +37,9 @@ export class NoteResolver {
         private readonly getDeletedNotesUseCase: GetDeletedNotesUseCase,
         private readonly restoreNoteUseCase: RestoreNoteUseCase,
         private readonly permanentlyDeleteNoteUseCase: PermanentlyDeleteNoteUseCase,
+        private readonly toggleFavoriteNoteUseCase: ToggleFavoriteNoteUseCase,
+        private readonly updateNoteIconUseCase: UpdateNoteIconUseCase,
+        private readonly removeNoteIconUseCase: RemoveNoteIconUseCase,
     ) { }
 
     @Mutation(() => NoteOutput)
@@ -151,6 +157,36 @@ export class NoteResolver {
         return notes.map(this.toOutput);
     }
 
+    @Mutation(() => Boolean)
+    @UseGuards(AuthGuard)
+    async toggleFavoriteNote(
+        @Args('id') id: string,
+        @CurrentUser() user: { userId: string },
+    ): Promise<boolean> {
+        await this.toggleFavoriteNoteUseCase.execute(id, user.userId);
+        return true;
+    }
+
+    @Mutation(() => NoteOutput)
+    @UseGuards(AuthGuard)
+    async updateNoteIcon(
+        @Args('input') input: UpdateNoteIconInput,
+        @CurrentUser() user: { userId: string },
+    ): Promise<NoteOutput> {
+        const note = await this.updateNoteIconUseCase.execute(input.id, input.iconUrl, user.userId);
+        return this.toOutput(note);
+    }
+
+    @Mutation(() => NoteOutput)
+    @UseGuards(AuthGuard)
+    async removeNoteIcon(
+        @Args('input') input: RemoveNoteIconInput,
+        @CurrentUser() user: { userId: string },
+    ): Promise<NoteOutput> {
+        const note = await this.removeNoteIconUseCase.execute(input.id, user.userId);
+        return this.toOutput(note);
+    }
+
     private toOutput(note: Note): NoteOutput {
         return {
             id: note.id,
@@ -161,6 +197,9 @@ export class NoteResolver {
             createdAt: note.createdAt,
             updatedAt: note.updatedAt,
             isDeleted: note.isDeleted,
+            isFavorite: note.isFavorite,
+            iconUrl: note.iconUrl ?? null,
+            attachedFiles: note.attachedFiles,
         };
     }
 }

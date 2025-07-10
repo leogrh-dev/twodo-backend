@@ -218,7 +218,7 @@ export function getDefaultNotesForUser(userId: string): Note[] {
             content: [
                 {
                     type: 'text',
-                    text: 'Essa abordagem traz benefícios reais em manutenibilidade, clareza na leitura e separação de responsabilidades.',
+                    text: 'Essa abordagem traz benefícios reais em manutenabilidade, clareza na leitura e separação de responsabilidades.',
                     styles: {}
                 }
             ],

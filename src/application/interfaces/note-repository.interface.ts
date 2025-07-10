@@ -10,4 +10,5 @@ export abstract class NoteRepository {
   abstract restore(id: string): Promise<void>;
   abstract findDeletedByOwner(ownerId: string): Promise<Note[]>;
   abstract permanentlyDelete(id: string): Promise<void>;
+  abstract toggleFavorite(id: string, isFavorite: boolean): Promise<void>;
 }

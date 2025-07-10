@@ -7,6 +7,6 @@ export class FindNotesByOwnerUseCase {
   constructor(private readonly noteRepository: NoteRepository) { }
 
   async execute(ownerId: string): Promise<Note[]> {
-    return this.noteRepository.findByOwner(ownerId, 10);
+    return this.noteRepository.findByOwner(ownerId, 100);
   }
 }

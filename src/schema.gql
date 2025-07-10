@@ -22,6 +22,9 @@ type NoteOutput {
   createdAt: DateTime!
   updatedAt: DateTime!
   isDeleted: Boolean!
+  isFavorite: Boolean!
+  iconUrl: String
+  attachedFiles: [String!]!
 }
 
 """
@@ -51,6 +54,9 @@ type Mutation {
   deleteNote(id: String!): Boolean!
   restoreNote(id: String!): Boolean!
   permanentlyDeleteNote(id: String!): Boolean!
+  toggleFavoriteNote(id: String!): Boolean!
+  updateNoteIcon(input: UpdateNoteIconInput!): NoteOutput!
+  removeNoteIcon(input: RemoveNoteIconInput!): NoteOutput!
 }
 
 input RegisterInput {
@@ -98,5 +104,14 @@ input UpdateNoteBannerInput {
 }
 
 input RemoveNoteBannerInput {
+  id: String!
+}
+
+input UpdateNoteIconInput {
+  id: String!
+  iconUrl: String!
+}
+
+input RemoveNoteIconInput {
   id: String!
 }

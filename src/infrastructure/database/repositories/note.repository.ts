@@ -25,7 +25,9 @@ export class NoteRepositoryImpl implements NoteRepository {
                     title: note.title,
                     content: note.content,
                     bannerUrl: note.bannerUrl,
+                    iconUrl: note.iconUrl,
                     updatedAt: note.updatedAt,
+                    attachedFiles: note.attachedFiles,
                 },
                 { new: true }
             )
@@ -66,6 +68,13 @@ export class NoteRepositoryImpl implements NoteRepository {
         await this.Note.deleteOne({ id }).exec();
     }
 
+    async toggleFavorite(id: string, isFavorite: boolean): Promise<void> {
+        await this.Note.findOneAndUpdate(
+            { id },
+            { isFavorite, updatedAt: new Date() }
+        ).exec();
+    }
+
     async findByOwner(ownerId: string, limit = 10): Promise<NoteEntity[]> {
         const docs = await this.Note
             .find({ ownerId })
@@ -88,7 +97,10 @@ export class NoteRepositoryImpl implements NoteRepository {
             doc.bannerUrl,
             doc.createdAt,
             doc.updatedAt,
-            doc.isDeleted
+            doc.isDeleted,
+            doc.isFavorite,
+            doc.iconUrl,
+            doc.attachedFiles ?? [],
         );
     }
 
@@ -101,7 +113,10 @@ export class NoteRepositoryImpl implements NoteRepository {
             doc.bannerUrl,
             doc.createdAt,
             doc.updatedAt,
-            doc.isDeleted
+            doc.isDeleted,
+            doc.isFavorite,
+            doc.iconUrl,
+            doc.attachedFiles ?? [],
         );
     }
 }

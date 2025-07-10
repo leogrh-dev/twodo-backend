@@ -31,12 +31,15 @@ import { DeleteNoteUseCase } from 'src/core/use-cases/note/delete-note.usecase';
 import { GetDeletedNotesUseCase } from 'src/core/use-cases/note/get-deleted-notes.usecase';
 import { RestoreNoteUseCase } from 'src/core/use-cases/note/restore-note.usecase';
 import { PermanentlyDeleteNoteUseCase } from 'src/core/use-cases/note/permanently-delete-note.usecase';
+import { ToggleFavoriteNoteUseCase } from 'src/core/use-cases/note/toggle-favorite-note.usecase';
 
 import { AuthResolver } from './resolvers/auth.resolvers';
 import { NoteResolver } from './resolvers/note.resolvers';
 
 import { ServicesModule } from '../services/services.module';
 import { UploadModule } from '../upload/upload.module';
+import { UpdateNoteIconUseCase } from 'src/core/use-cases/note/update-note-icon.usecase';
+import { RemoveNoteIconUseCase } from 'src/core/use-cases/note/remove-note-icon.usecase';
 
 @Module({
     imports: [
@@ -72,10 +75,13 @@ import { UploadModule } from '../upload/upload.module';
         UpdateNoteContentUseCase,
         UpdateNoteBannerUseCase,
         RemoveNoteBannerUseCase,
+        UpdateNoteIconUseCase,
+        RemoveNoteIconUseCase,
         DeleteNoteUseCase,
         GetDeletedNotesUseCase,
         RestoreNoteUseCase,
         PermanentlyDeleteNoteUseCase,
+        ToggleFavoriteNoteUseCase,
 
         {
             provide: 'AuthRepository',

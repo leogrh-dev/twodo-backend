@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     Controller,
     Post,
     UploadedFile,
@@ -14,6 +15,15 @@ export class UploadController {
     @Post()
     @UseInterceptors(FileInterceptor('file'))
     async upload(@UploadedFile() file: Express.Multer.File) {
+        if (!file) {
+            throw new BadRequestException('Nenhum arquivo enviado');
+        }
+
+        const MAX_SIZE = 5 * 1024 * 1024;
+        if (file.size > MAX_SIZE) {
+            throw new BadRequestException('O arquivo excede o limite de 5MB');
+        }
+
         const { buffer, mimetype, originalname } = file;
 
         const url = await this.uploadFileUseCase.execute({
