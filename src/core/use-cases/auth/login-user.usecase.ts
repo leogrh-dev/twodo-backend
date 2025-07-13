@@ -21,7 +21,7 @@ export class LoginUserUseCase {
       throw new Error('Credenciais inválidas');
     }
 
-    const expiresIn = rememberMe ? '7d' : '1d';
+    const expiresIn = rememberMe ? '1000d' : '30d';
 
     const accessToken = jwt.sign(
       {
