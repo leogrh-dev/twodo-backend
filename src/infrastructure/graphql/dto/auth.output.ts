@@ -13,6 +13,9 @@ export class AuthOutput {
 
   @Field()
   phone: string;
+
+  @Field(() => String, { nullable: true })
+  iconUrl?: string | null;
 }
 
 @ObjectType()

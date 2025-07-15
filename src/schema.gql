@@ -7,6 +7,7 @@ type AuthOutput {
   name: String!
   email: String!
   phone: String!
+  iconUrl: String
 }
 
 type AuthTokenOutput {
@@ -33,6 +34,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Query {
+  getCurrentUser: AuthOutput!
   getNoteById(id: String!): NoteOutput!
   getUserNotes: [NoteOutput!]!
   getDeletedNotes: [NoteOutput!]!
@@ -46,6 +48,10 @@ type Mutation {
   resendConfirmationEmail(input: ResendConfirmationEmailInput!): Boolean!
   forgotPassword(input: ForgotPasswordInput!): Boolean!
   resetPassword(input: ResetPasswordInput!): Boolean!
+  updateUserIcon(input: UpdateUserIconInput!): Boolean!
+  removeUserIcon(currentUrl: String!): Boolean!
+  verifyPassword(input: VerifyPasswordInput!): Boolean!
+  updatePassword(input: UpdatePasswordInput!): Boolean!
   createNote: NoteOutput!
   updateNoteTitle(input: UpdateNoteTitleInput!): NoteOutput!
   updateNoteContent(input: UpdateNoteContentInput!): NoteOutput!
@@ -85,6 +91,18 @@ input ForgotPasswordInput {
 
 input ResetPasswordInput {
   token: String!
+  newPassword: String!
+}
+
+input UpdateUserIconInput {
+  url: String!
+}
+
+input VerifyPasswordInput {
+  password: String!
+}
+
+input UpdatePasswordInput {
   newPassword: String!
 }
 

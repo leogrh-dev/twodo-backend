@@ -19,6 +19,8 @@ import { ConfirmEmailUseCase } from '../../core/use-cases/auth/confirm-email.use
 import { ResendEmailConfirmationUseCase } from 'src/core/use-cases/auth/resend-email-confirmation.usecase';
 import { RequestPasswordResetUseCase } from 'src/core/use-cases/auth/request-password-reset.usecase';
 import { ResetPasswordUseCase } from 'src/core/use-cases/auth/reset-password.usecase';
+import { UpdateUserIconUseCase } from 'src/core/use-cases/auth/update-user-icon.usecase';
+import { RemoveUserIconUseCase } from 'src/core/use-cases/auth/remove-user-icon.usecase';
 
 import { CreateNoteUseCase } from 'src/core/use-cases/note/create-note.usecase';
 import { FindNotesByOwnerUseCase } from 'src/core/use-cases/note/find-notes-by-owner.usecase';
@@ -40,6 +42,9 @@ import { ServicesModule } from '../services/services.module';
 import { UploadModule } from '../upload/upload.module';
 import { UpdateNoteIconUseCase } from 'src/core/use-cases/note/update-note-icon.usecase';
 import { RemoveNoteIconUseCase } from 'src/core/use-cases/note/remove-note-icon.usecase';
+import { GetCurrentUserUseCase } from 'src/core/use-cases/auth/get-current-user.usecase';
+import { VerifyPasswordUseCase } from 'src/core/use-cases/auth/verify-password.usecase';
+import { UpdatePasswordUseCase } from 'src/core/use-cases/auth/update-password.usecase';
 
 @Module({
     imports: [
@@ -60,6 +65,7 @@ import { RemoveNoteIconUseCase } from 'src/core/use-cases/note/remove-note-icon.
         AuthResolver,
         NoteResolver,
 
+        GetCurrentUserUseCase,
         RegisterUserUseCase,
         LoginUserUseCase,
         LoginWithGoogleUseCase,
@@ -67,6 +73,10 @@ import { RemoveNoteIconUseCase } from 'src/core/use-cases/note/remove-note-icon.
         ResendEmailConfirmationUseCase,
         RequestPasswordResetUseCase,
         ResetPasswordUseCase,
+        UpdateUserIconUseCase,
+        RemoveUserIconUseCase,
+        VerifyPasswordUseCase,
+        UpdatePasswordUseCase,
 
         CreateNoteUseCase,
         FindNotesByOwnerUseCase,

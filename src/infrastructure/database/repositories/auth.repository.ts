@@ -24,6 +24,22 @@ export class AuthRepositoryImpl implements AuthRepository {
       userDoc.phone,
       userDoc.password,
       userDoc.emailVerified,
+      userDoc.iconUrl ?? null
+    );
+  }
+
+  async findById(userId: string): Promise<User | null> {
+    const userDoc = await this.userModel.findById(userId);
+    if (!userDoc) return null;
+
+    return new User(
+      userDoc._id.toString(),
+      userDoc.name,
+      userDoc.email,
+      userDoc.phone,
+      userDoc.password,
+      userDoc.emailVerified,
+      userDoc.iconUrl ?? null
     );
   }
 
@@ -55,6 +71,20 @@ export class AuthRepositoryImpl implements AuthRepository {
     await this.userModel.updateOne(
       { _id: userId },
       { $set: { password: hashedPassword } },
+    );
+  }
+
+  async updateIconUrl(userId: string, url: string): Promise<void> {
+    await this.userModel.updateOne(
+      { _id: userId },
+      { $set: { iconUrl: url } },
+    );
+  }
+
+  async removeIconUrl(userId: string): Promise<void> {
+    await this.userModel.updateOne(
+      { _id: userId },
+      { $unset: { iconUrl: "" } },
     );
   }
 }

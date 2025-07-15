@@ -30,6 +30,7 @@ export class LoginUserUseCase {
         email: user.email,
         phone: user.phone,
         emailVerified: user.emailVerified,
+        iconUrl: user.iconUrl ?? null,
       },
       process.env.JWT_SECRET || 'default-secret',
       {

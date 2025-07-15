@@ -36,3 +36,21 @@ export class ResendConfirmationEmailInput {
   @Field()
   email: string;
 }
+
+@InputType()
+export class UpdateUserIconInput {
+  @Field()
+  url: string;
+}
+
+@InputType()
+export class VerifyPasswordInput {
+  @Field()
+  password: string;
+}
+
+@InputType()
+export class UpdatePasswordInput {
+  @Field()
+  newPassword: string;
+}

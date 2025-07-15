@@ -17,6 +17,9 @@ export class UserModel {
 
   @Prop({ default: false })
   emailVerified: boolean;
+
+  @Prop({ type: String, default: null })
+  iconUrl: string | null;
 }
 
 export type UserDocument = HydratedDocument<UserModel>;
