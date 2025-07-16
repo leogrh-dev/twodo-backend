@@ -45,6 +45,8 @@ import { RemoveNoteIconUseCase } from 'src/core/use-cases/note/remove-note-icon.
 import { GetCurrentUserUseCase } from 'src/core/use-cases/auth/get-current-user.usecase';
 import { VerifyPasswordUseCase } from 'src/core/use-cases/auth/verify-password.usecase';
 import { UpdatePasswordUseCase } from 'src/core/use-cases/auth/update-password.usecase';
+import { UpdateUserNameUseCase } from 'src/core/use-cases/auth/update-user-name.usecase';
+import { DeleteUserUseCase } from 'src/core/use-cases/auth/delete-user.usecase';
 
 @Module({
     imports: [
@@ -77,6 +79,8 @@ import { UpdatePasswordUseCase } from 'src/core/use-cases/auth/update-password.u
         RemoveUserIconUseCase,
         VerifyPasswordUseCase,
         UpdatePasswordUseCase,
+        UpdateUserNameUseCase,
+        DeleteUserUseCase,
 
         CreateNoteUseCase,
         FindNotesByOwnerUseCase,

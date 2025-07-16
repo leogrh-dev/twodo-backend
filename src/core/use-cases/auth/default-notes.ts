@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 
 export function getDefaultNotesForUser(userId: string): Note[] {
     const now = new Date();
+    const bannerColor = '#1037B8';
 
     const welcomeNoteContent = JSON.stringify([
         {
@@ -237,7 +238,7 @@ export function getDefaultNotesForUser(userId: string): Note[] {
             props: { textColor: 'default', backgroundColor: 'default', textAlignment: 'left', level: 3 },
             content: [
                 { type: 'text', text: 'Tecnologias Utilizadas', styles: { bold: true } },
-                { type: 'text', text: ' 🧩', styles: {} }
+                { type: 'text', text: '🧩', styles: {} }
             ],
             children: [],
         },
@@ -356,15 +357,35 @@ export function getDefaultNotesForUser(userId: string): Note[] {
             id: '26',
             type: 'quote',
             props: { textColor: 'default', backgroundColor: 'default' },
-            content: [
-                { type: 'text', text: 'TwoDo - Onde suas tarefas encontram ordem.', styles: {} }
-            ],
+            content: [{ type: 'text', text: 'TwoDo - Onde suas tarefas encontram ordem.', styles: {} }],
             children: [],
         }
     ]);
 
     return [
-        new Note(randomUUID(), 'Bem-vindo ao Twodo 👋', welcomeNoteContent, userId, null, now, now, false),
-        new Note(randomUUID(), 'Créditos 🏁', creditsNoteContent, userId, null, now, now, false),
+        new Note(
+            randomUUID(),
+            'Bem-vindo ao Twodo',
+            welcomeNoteContent,
+            userId,
+            bannerColor,
+            now,
+            now,
+            false,
+            true,
+            '👋'
+        ),
+        new Note(
+            randomUUID(),
+            'Créditos',
+            creditsNoteContent,
+            userId,
+            bannerColor,
+            now,
+            now,
+            false,
+            true,
+            '🏁'
+        )
     ];
 }

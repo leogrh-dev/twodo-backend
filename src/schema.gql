@@ -51,6 +51,8 @@ type Mutation {
   updateUserIcon(input: UpdateUserIconInput!): Boolean!
   removeUserIcon(currentUrl: String!): Boolean!
   verifyPassword(input: VerifyPasswordInput!): Boolean!
+  updateUserName(input: UpdateUserNameInput!): Boolean!
+  deleteAccount(input: DeleteAccountInput!): Boolean!
   updatePassword(input: UpdatePasswordInput!): Boolean!
   createNote: NoteOutput!
   updateNoteTitle(input: UpdateNoteTitleInput!): NoteOutput!
@@ -100,6 +102,14 @@ input UpdateUserIconInput {
 
 input VerifyPasswordInput {
   password: String!
+}
+
+input UpdateUserNameInput {
+  newName: String!
+}
+
+input DeleteAccountInput {
+  emailConfirmation: String!
 }
 
 input UpdatePasswordInput {

@@ -1,5 +1,5 @@
 import { Resolver, Mutation, Args, Query } from '@nestjs/graphql';
-import { GoogleLoginInput, LoginInput, RegisterInput, ResendConfirmationEmailInput, UpdatePasswordInput, UpdateUserIconInput, VerifyPasswordInput } from '../dto/auth.input';
+import { DeleteAccountInput, GoogleLoginInput, LoginInput, RegisterInput, ResendConfirmationEmailInput, UpdatePasswordInput, UpdateUserIconInput, UpdateUserNameInput, VerifyPasswordInput } from '../dto/auth.input';
 import { AuthOutput, AuthTokenOutput } from '../dto/auth.output';
 import { RegisterUserUseCase } from '../../../core/use-cases/auth/register-user.usecase';
 import { LoginUserUseCase } from 'src/core/use-cases/auth/login-user.usecase';
@@ -18,6 +18,8 @@ import { UpdateUserIconUseCase } from 'src/core/use-cases/auth/update-user-icon.
 import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
+import { UpdateUserNameUseCase } from 'src/core/use-cases/auth/update-user-name.usecase';
+import { DeleteUserUseCase } from 'src/core/use-cases/auth/delete-user.usecase';
 
 @Resolver()
 export class AuthResolver {
@@ -34,6 +36,8 @@ export class AuthResolver {
         private readonly getCurrentUserUseCase: GetCurrentUserUseCase,
         private readonly verifyPasswordUseCase: VerifyPasswordUseCase,
         private readonly updatePasswordUseCase: UpdatePasswordUseCase,
+        private readonly updateUserNameUseCase: UpdateUserNameUseCase,
+        private readonly deleteUserUseCase: DeleteUserUseCase,
     ) { }
 
     @Mutation(() => AuthOutput)
@@ -135,6 +139,32 @@ export class AuthResolver {
     ): Promise<boolean> {
         return this.verifyPasswordUseCase.execute(user.userId, input.password);
     }
+
+    @Mutation(() => Boolean)
+    @UseGuards(AuthGuard)
+    async updateUserName(
+        @CurrentUser() user: { userId: string },
+        @Args('input') input: UpdateUserNameInput,
+    ): Promise<boolean> {
+        await this.updateUserNameUseCase.execute(user.userId, input.newName);
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    @UseGuards(AuthGuard)
+    async deleteAccount(
+        @CurrentUser() user: { userId: string },
+        @Args('input') input: DeleteAccountInput,
+    ): Promise<boolean> {
+        const entity = await this.getCurrentUserUseCase.execute(user.userId);
+        if (entity.email !== input.emailConfirmation) {
+            throw new Error('E-mail de confirmação incorreto');
+        }
+
+        await this.deleteUserUseCase.execute(user.userId);
+        return true;
+    }
+
 
     @Mutation(() => Boolean)
     @UseGuards(AuthGuard)

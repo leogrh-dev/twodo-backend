@@ -54,3 +54,15 @@ export class UpdatePasswordInput {
   @Field()
   newPassword: string;
 }
+
+@InputType()
+export class UpdateUserNameInput {
+  @Field()
+  newName: string;
+}
+
+@InputType()
+export class DeleteAccountInput {
+  @Field()
+  emailConfirmation: string;
+}

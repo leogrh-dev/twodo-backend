@@ -8,7 +8,7 @@ import { NoteRepository } from '../../../application/interfaces/note-repository.
 import { User } from '../../entities/user.entity';
 import { SendEmailService } from 'src/infrastructure/services/send-email/send-email.service';
 
-import { getDefaultNotesForUser } from './default-notes'; // ✅ novo import
+import { getDefaultNotesForUser } from './default-notes';
 
 @Injectable()
 export class RegisterUserUseCase {

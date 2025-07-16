@@ -67,6 +67,17 @@ export class AuthRepositoryImpl implements AuthRepository {
     );
   }
 
+  async updateUserName(userId: string, newName: string): Promise<void> {
+    await this.userModel.updateOne(
+      { _id: userId },
+      { $set: { name: newName } }
+    );
+  }
+
+  async deleteById(userId: string): Promise<void> {
+    await this.userModel.deleteOne({ _id: userId });
+  }
+
   async updatePassword(userId: string, hashedPassword: string): Promise<void> {
     await this.userModel.updateOne(
       { _id: userId },

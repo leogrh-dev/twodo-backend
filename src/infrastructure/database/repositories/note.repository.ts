@@ -68,6 +68,10 @@ export class NoteRepositoryImpl implements NoteRepository {
         await this.Note.deleteOne({ id }).exec();
     }
 
+    async deleteByOwner(ownerId: string): Promise<void> {
+        await this.Note.deleteMany({ ownerId }).exec();
+    }
+
     async toggleFavorite(id: string, isFavorite: boolean): Promise<void> {
         await this.Note.findOneAndUpdate(
             { id },
