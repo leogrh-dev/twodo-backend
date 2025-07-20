@@ -55,6 +55,7 @@ export class AuthResolver {
             name: user.name,
             email: user.email,
             phone: user.phone,
+            emailVerified: user.emailVerified,
         };
     }
 
@@ -188,6 +189,7 @@ export class AuthResolver {
             email: entity.email,
             phone: entity.phone,
             iconUrl: entity.iconUrl ?? null,
+            emailVerified: entity.emailVerified,
         };
     }
 }

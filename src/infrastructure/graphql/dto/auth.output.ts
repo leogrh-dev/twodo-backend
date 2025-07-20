@@ -16,6 +16,9 @@ export class AuthOutput {
 
   @Field(() => String, { nullable: true })
   iconUrl?: string | null;
+
+  @Field()
+  emailVerified: boolean;
 }
 
 @ObjectType()
