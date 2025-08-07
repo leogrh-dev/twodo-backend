@@ -125,9 +125,9 @@ npm run start:dev
 ## 🤝 Contribuindo
 
 1. Faça um fork do repositório
-2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
-3. Commit suas alterações (`git commit -m 'feat: nova funcionalidade'`)
-4. Push na sua branch (`git push origin feature/nova-funcionalidade`)
+2. Crie uma branch (`git checkout -b FEAT/nova-funcionalidade`)
+3. Commit suas alterações (`git commit -m 'FEAT: nova funcionalidade'`)
+4. Push na sua branch (`git push origin FEAT/nova-funcionalidade`)
 5. Abra um Pull Request
 
 ### 📋 Diretrizes de Contribuição:
