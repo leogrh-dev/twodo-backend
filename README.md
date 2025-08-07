@@ -1,99 +1,146 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Twodo - Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+> API moderna e escalável para gerenciamento de notas, construída com NestJS e Clean Architecture.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📖 Sobre o Projeto
 
-## Description
+O **Twodo Backend** é a API responsável por autenticação, manipulação de notas, gerenciamento de arquivos e serviços de infraestrutura como Redis, envio de e-mails e integração com AWS. Todo o sistema foi projetado com **Clean Architecture** para garantir **baixa acoplamento**, **alta coesão** e **facilidade de testes**.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 🎯 Objetivo
+Fornecer uma base de backend robusta, modular e desacoplada para atender às funcionalidades do Twodo de forma segura e escalável.
 
-## Project setup
+---
 
-```bash
-$ npm install
+## 🏗️ Arquitetura
+
+Este backend segue **rigorosamente** os princípios da **Clean Architecture** de Uncle Bob, com separação clara de responsabilidades entre as camadas da aplicação.
+
+```
+🏛️ Clean Architecture Layers
+├── 🟢 Entities (Regras de Negócio Corporativas)
+├── 🔵 Use Cases (Regras de Negócio da Aplicação)
+├── 🟡 Interface Adapters (DTOs, Mappers, Resolvers, Repositórios)
+└── 🔴 Frameworks & Drivers (Banco, Redis, GraphQL, S3, Email)
 ```
 
-## Compile and run the project
+### Princípios Aplicados
+- **Regra da Dependência**: As dependências sempre apontam para dentro
+- **Independência de Frameworks**: O domínio não conhece NestJS, GraphQL ou MongoDB
+- **Inversão de Dependência**: Interfaces no centro, implementações nas bordas
+- **Testabilidade Extrema**: Use Cases puros, desacoplados de tecnologias externas
 
-```bash
-# development
-$ npm run start
+---
 
-# watch mode
-$ npm run start:dev
+## 🛠️ Stack Tecnológica
 
-# production mode
-$ npm run start:prod
+### Backend
+- **NestJS** — Estrutura principal do backend
+- **TypeScript** — Strict mode habilitado
+- **GraphQL** — API flexível baseada em esquemas
+- **MongoDB (Mongoose)** — Banco de dados NoSQL
+- **Redis** — Cache e controle de estado
+- **AWS S3** — Armazenamento de arquivos
+- **Nodemailer** — Serviço SMTP para envio de e-mails
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+src/
+├─ application/             # Interfaces dos contratos do domínio
+├─ core/                    # Entities e Use Cases (domínio puro)
+├─ infrastructure/          # Implementações de interface adapters
+├─ shared/                  # Decorators, exceptions e guards
+├─ app.module.ts            # Módulo principal do NestJS
+├─ main.ts                  # Entry point da aplicação
+└─ schema.gql               # Esquema gerado do GraphQL
 ```
 
-## Run tests
+### Organização por Domínio
 
-```bash
-# unit tests
-$ npm run test
+Cada subpasta segue **feature-based architecture** respeitando o isolamento de contexto e limites da aplicação:
 
-# e2e tests
-$ npm run test:e2e
+- `auth/`, `note/`, `file/` no domínio (`core/use-cases`)
+- Implementações em `infrastructure/` respeitam as interfaces de `application/interfaces`
 
-# test coverage
-$ npm run test:cov
+---
+
+## 🔐 Exemplo de `.env`
+
+```env
+# Configuração da aplicação
+PORT=3000
+
+# MongoDB
+MONGO_URI=mongodb://localhost:27017/twodo
+
+# Autenticação
+JWT_SECRET=sua-chave-ultra-secreta
+GOOGLE_CLIENT_ID=sua-client-id.apps.googleusercontent.com
+
+# SMTP
+SMTP_EMAIL=seu-email@gmail.com
+SMTP_PASSWORD=sua-senha-de-aplicativo
+
+# Redis
+REDIS_URL=redis://localhost:6379
+
+# AWS S3
+AWS_ACCESS_KEY_ID=SEU_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY=SUA_SECRET_KEY
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=twodo-files
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## 🚀 Como Executar
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Pré-requisitos
+- Node.js 18+
+- MongoDB e Redis rodando localmente ou via Docker
+- Arquivo `.env` com as variáveis acima
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+### Passos
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+# Instale as dependências
+npm install
 
-## Resources
+# Inicie o backend
+npm run start:dev
 
-Check out a few resources that may come in handy when working with NestJS:
+## 📈 Status do Desenvolvimento
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+🔄 **Em Desenvolvimento Ativo**
 
-## Support
+### Próximas Funcionalidades:
+- [ ] Upload e preview de arquivos
+- [ ] Busca full-text nas notas
+- [ ] Compartilhamento de notas entre usuários
+- [ ] Auditoria de alterações
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## 🤝 Contribuindo
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+1. Faça um fork do repositório
+2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
+3. Commit suas alterações (`git commit -m 'feat: nova funcionalidade'`)
+4. Push na sua branch (`git push origin feature/nova-funcionalidade`)
+5. Abra um Pull Request
 
-## License
+### 📋 Diretrizes de Contribuição:
+- Seguir **rigorosamente a Clean Architecture**
+- Nenhuma regra de negócio fora dos **Use Cases**
+- Escrever testes para todas as regras de negócio
+- Toda dependência externa deve ser injetada
+- Não acoplar o domínio ao NestJS, Mongoose, GraphQL, etc.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-"# twodo-backend" 
+## 👥 Autor
+
+Desenvolvido por Leonardo Gabriel Reis Henrique
+
+---
+
+**Twodo Backend** — onde organização encontra arquitetura de verdade.
